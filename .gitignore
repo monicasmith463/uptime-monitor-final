@@ -31,8 +31,12 @@ logs/
 # Testing
 .pytest_cache/
 .coverage
+coverage.xml
 htmlcov/
 .tox/
+
+# Prometheus (local run data)
+prometheus_data/
 
 # OS
 .DS_Store
