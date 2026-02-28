@@ -19,25 +19,21 @@ ENV/
 *.swp
 *.swo
 
-# Database
 *.db
 *.sqlite
 dump.rdb
 
-# Logs
 *.log
 logs/
 
-# Testing
 .pytest_cache/
 .coverage
 coverage.xml
 htmlcov/
 .tox/
 
-# Prometheus (local run data)
+data/
 prometheus_data/
 
-# OS
 .DS_Store
 Thumbs.db
