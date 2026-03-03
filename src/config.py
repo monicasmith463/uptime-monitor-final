@@ -18,14 +18,16 @@ POSTGRES_DB = os.getenv("POSTGRES_DB")
 POSTGRES_USER = os.getenv("POSTGRES_USER")
 POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
 
-if POSTGRES_PORT:
-    port_string = f":{POSTGRES_PORT}"
+if os.getenv("DATABASE_URL"):
+    DATABASE_URL = os.getenv("DATABASE_URL").replace("postgres://", "postgresql://", 1)
 else:
-    port_string = ""  
+    port_string = f":{POSTGRES_PORT}" if POSTGRES_PORT else ""
+    DATABASE_URL = (
+        f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
+        f"@{POSTGRES_SERVER}{port_string}/{POSTGRES_DB}"
+    )
 
-DATABASE_URL = (
-    f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
-    f"@{POSTGRES_SERVER}{port_string}/{POSTGRES_DB}"
-)
-
-r = redis.Redis(host='localhost', port=6379, decode_responses=True)
+if os.getenv("REDIS_URL"):
+    r = redis.from_url(os.getenv("REDIS_URL"), decode_responses=True)
+else:
+    r = redis.Redis(host="localhost", port=6379, decode_responses=True)
