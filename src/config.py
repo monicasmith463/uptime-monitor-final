@@ -18,16 +18,20 @@ POSTGRES_DB = os.getenv("POSTGRES_DB")
 POSTGRES_USER = os.getenv("POSTGRES_USER")
 POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
 
-if os.getenv("DATABASE_URL"):
-    DATABASE_URL = os.getenv("DATABASE_URL").replace("postgres://", "postgresql://", 1)
-else:
+_db_url = os.getenv("DATABASE_URL")
+if _db_url and _db_url.strip():
+    DATABASE_URL = _db_url.replace("postgres://", "postgresql://", 1)
+elif POSTGRES_SERVER and POSTGRES_USER and POSTGRES_DB:
     port_string = f":{POSTGRES_PORT}" if POSTGRES_PORT else ""
     DATABASE_URL = (
-        f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
+        f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD or ''}"
         f"@{POSTGRES_SERVER}{port_string}/{POSTGRES_DB}"
     )
+else:
+    raise ValueError("database not configured")
 
-if os.getenv("REDIS_URL"):
-    r = redis.from_url(os.getenv("REDIS_URL"), decode_responses=True)
+_redis_url = os.getenv("REDIS_URL") or os.getenv("REDISCLOUD_URL")
+if _redis_url:
+    r = redis.from_url(_redis_url, decode_responses=True)
 else:
     r = redis.Redis(host="localhost", port=6379, decode_responses=True)
