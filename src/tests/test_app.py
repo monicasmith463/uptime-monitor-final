@@ -5,8 +5,6 @@ from src.app import app as main_app
 
 @pytest.fixture()
 def app():
-
-    
     main_app.config["TESTING"] = True
     yield main_app
 

@@ -4,7 +4,7 @@ from src.services.analyzer import analyze_health_check
 
 
 def test_analyze_health_check():
-    payload = {"site": "https://example.com",
+    payload = {"site": "https://test.com",
         "response_time": 0.5,
         "status_code": 200,
         "error": None}
